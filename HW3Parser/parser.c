@@ -1,3 +1,17 @@
+/*=============================================================================
+| Assignment: HW03 – Parser-Code Generator
+|
+| Author: Edelis Molina
+| Language: C
+|
+| To Compile: gcc driver.c lex.o parser.c vm.o -OR- run the Makefile with command "make". 
+|             Makefile runs the command "gcc driver.c lex.o parser.c vm.o"
+|
+| To Execute: ./a.out filename.txt directives
+|
+| Class: COP3402 - Systems Software – Fall 2021
++=============================================================================*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
