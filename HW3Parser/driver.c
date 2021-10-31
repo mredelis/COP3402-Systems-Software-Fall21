@@ -66,16 +66,14 @@ int main(int argc, char *argv[])
 	}
 
 
-	list = lexanalyzer(input, tokens);
+	list = lexanalyzer(input, tokens); //HW2
 	if (list == NULL)
 	{
 		free(input);
 		return 0;
 	}
-
-  // printf("Printing first token read-> %s %d %d\n\n", list->name, list->value, list->type);
   
-	code = parse(list, symbols, codes);
+	code = parse(list, symbols, codes); //HW3
 	if (code == NULL)
 	{
 	 	free(input);
