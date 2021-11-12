@@ -18,13 +18,13 @@
 #define MAX_IDENT_LEN 11
 #define MAX_NUMBER_LEN 5
 #define LENGTH 100     // for char buffer
-#define MAX_MUNBER_RESERVED_WORDS 14
+#define MAX_NUMBER_RESERVED_WORDS 12
 
 /* Global vars */
 lexeme *list;
 int lex_index;
-char *reservedWords[] = {"const", "var", "procedure", "begin", "end", "while", "do","if",
-                        "then", "else", "call", "write", "read", "odd"};
+char *reservedWords[] = {"const", "var", "procedure", "do", "od", "while",
+                        "when", "elsedo", "call", "write", "read", "odd"};
 
 /* Function prototypes */
 void printlexerror(int type);
@@ -56,23 +56,23 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
 
     // Special Sysmbols: == != < <= > >= % * / + - ( ) , . ; :=
     else if(input[i] == '+')
-      list[lex_index].type = 17;
+      list[lex_index].type = 15;
     else if(input[i] == '-')
-      list[lex_index].type = 18;
+      list[lex_index].type = 16;
     else if(input[i] == '*')
-      list[lex_index].type = 19;
+      list[lex_index].type = 17;
     else if(input[i] == '%')
-      list[lex_index].type = 21;
+      list[lex_index].type = 19;
     else if(input[i] == '(')
-      list[lex_index].type = 29;
+      list[lex_index].type = 27;
     else if(input[i] == ')')
-      list[lex_index].type = 30;    
+      list[lex_index].type = 28;    
     else if(input[i] == ',')
-      list[lex_index].type = 31;  
+      list[lex_index].type = 29;  
     else if(input[i] == '.')
-      list[lex_index].type = 32; 
+      list[lex_index].type = 30; 
     else if(input[i] == ';')
-      list[lex_index].type = 33; 
+      list[lex_index].type = 31; 
 
     // Handle special symbol with 2 chars. Check next char
     // Symbol ==
@@ -80,7 +80,7 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
     {
       if(input[i + 1] == '=')
       {
-        list[lex_index].type = 22;
+        list[lex_index].type = 20;
         i++;
       }
       else // Invalid symbol
@@ -94,7 +94,7 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
     else if(input[i] == '!')
     {
       if(input[i + 1] == '=') {
-        list[lex_index].type = 23;
+        list[lex_index].type = 21;
         i++;
       }
       else // Invalid symbol
@@ -108,7 +108,7 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
     else if(input[i] == ':')
     {
       if(input[i + 1] == '=') {
-        list[lex_index].type = 16;
+        list[lex_index].type = 14;
         i++;
       }
       else // Invalid symbol
@@ -122,22 +122,22 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
     else if(input[i] == '<')
     {
       if(input[i + 1] == '=') {
-        list[lex_index].type = 25;
+        list[lex_index].type = 23;
         i++;
       }
       else 
-        list[lex_index].type = 24;    
+        list[lex_index].type = 22;    
     } 
     
     // Symbol >= OR >
     else if(input[i] == '>')
     {
       if(input[i + 1] == '=') {
-        list[lex_index].type = 27;
+        list[lex_index].type = 25;
         i++;
       }
       else 
-        list[lex_index].type = 26;    
+        list[lex_index].type = 24;    
     } 
 
     else if(input[i] == '/')
@@ -153,7 +153,7 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
         continue;
       }
       else // It's a division symbol
-        list[lex_index].type = 20;
+        list[lex_index].type = 18;
     }
 
     // Numbers
@@ -186,12 +186,12 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
       buffer[j] = '\0';    
 
       list[lex_index].value = atoi(buffer);
-      list[lex_index].type = 15;
+      list[lex_index].type = 13;
 
       i--; // to come back to the last digit read
     }
 
-    // Identifiers / Reserved words
+    // Identifiers & Reserved words
     else if(isalpha(input[i]))
     {
       cnt = 1;
@@ -224,32 +224,28 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
           list[lex_index].type = 2;
         if(!strcmp(buffer, "procedure"))
           list[lex_index].type = 3;
-        if(!strcmp(buffer, "begin"))
+        if(!strcmp(buffer, "do"))
           list[lex_index].type = 4;
-        if(!strcmp(buffer, "end"))
+        if(!strcmp(buffer, "od"))
           list[lex_index].type = 5;
         if(!strcmp(buffer, "while"))
           list[lex_index].type = 6;
-        if(!strcmp(buffer, "do"))
+        if(!strcmp(buffer, "when"))
           list[lex_index].type = 7;
-        if(!strcmp(buffer, "if"))
+        if(!strcmp(buffer, "elsedo"))
           list[lex_index].type = 8;
-        if(!strcmp(buffer, "then"))
-          list[lex_index].type = 9;
-        if(!strcmp(buffer, "else"))
-          list[lex_index].type = 10;
         if(!strcmp(buffer, "call"))
-          list[lex_index].type = 11;
+          list[lex_index].type = 9;
         if(!strcmp(buffer, "write"))
-          list[lex_index].type = 12;
+          list[lex_index].type = 10;
         if(!strcmp(buffer, "read"))
-          list[lex_index].type = 13;
+          list[lex_index].type = 11;
         if(!strcmp(buffer, "odd"))
-          list[lex_index].type = 28;
+          list[lex_index].type = 26;
       }
       else // it's an identifier
       {
-        list[lex_index].type = 14;
+        list[lex_index].type = 12;
         strcpy(list[lex_index].name, buffer);
       }
     } // End of else if for identifiers and reserved words
@@ -339,26 +335,20 @@ void printtokens()
 			case assignsym:
 				printf("%11s\t%d", ":=", assignsym);
 				break;
-			case beginsym:
-				printf("%11s\t%d", "begin", beginsym);
+			case dosym:
+				printf("%11s\t%d", "do", dosym);
 				break;
-			case endsym:
-				printf("%11s\t%d", "end", endsym);
+			case odsym:
+				printf("%11s\t%d", "od", odsym);
 				break;
-			case ifsym:
-				printf("%11s\t%d", "if", ifsym);
+			case whensym:
+				printf("%11s\t%d", "when", whensym);
 				break;
-			case thensym:
-				printf("%11s\t%d", "then", thensym);
-				break;
-			case elsesym:
-				printf("%11s\t%d", "else", elsesym);
+			case elsedosym:
+				printf("%11s\t%d", "elsedo", elsedosym);
 				break;
 			case whilesym:
 				printf("%11s\t%d", "while", whilesym);
-				break;
-			case dosym:
-				printf("%11s\t%d", "do", dosym);
 				break;
 			case callsym:
 				printf("%11s\t%d", "call", callsym);
@@ -425,7 +415,7 @@ void printlexerror(int type)
 
 /* Helper function */
 int isReservedWord(char *buff) {
-  for(int i = 0; i < MAX_MUNBER_RESERVED_WORDS; i++)
+  for(int i = 0; i < MAX_NUMBER_RESERVED_WORDS; i++)
   {
     if(strcmp(buff, reservedWords[i]) == 0)
       return 1;

@@ -5,11 +5,11 @@
 */
 
 typedef enum token_type {
-	constsym = 1, varsym, procsym, beginsym, endsym, whilesym, dosym, 
-	ifsym, thensym, elsesym, callsym, writesym, readsym, identsym, 
-	numbersym, assignsym, addsym, subsym, multsym, divsym, modsym, 
-	eqlsym, neqsym, lsssym, leqsym, gtrsym, geqsym, oddsym, 
-	lparensym, rparensym, commasym, periodsym, semicolonsym
+	constsym = 1, varsym, procsym, dosym, odsym, whilesym, whensym, 
+	elsedosym, callsym, writesym, readsym, identsym, numbersym, assignsym, 
+	addsym, subsym, multsym, divsym, modsym, eqlsym, neqsym, 
+	lsssym, leqsym, gtrsym, geqsym, oddsym, lparensym, rparensym, 
+	commasym, periodsym, semicolonsym
 } token_type;
 
 typedef struct lexeme {
@@ -33,7 +33,7 @@ typedef struct symbol {
 	int mark;
 } symbol;
 
-// Function prototypes
-lexeme *lexanalyzer(char *input, int printFlag);
-instruction *parse(lexeme *list, int printTable, int printCode);
-void execute_program(instruction *code, int printFlag);
+
+lexeme *lexanalyzer(char *input, int printFlag); 					//Homework 02
+instruction *parse(lexeme *list, int printTable, int printCode); 	//Homework 03
+void execute_program(instruction *code, int printFlag); 			//Homework 01

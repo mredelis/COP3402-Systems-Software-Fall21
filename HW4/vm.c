@@ -1,33 +1,17 @@
 /*=============================================================================
-| Assignment: HW01 – (PM/0-Machine)
-|
+| Assignment: HW01 – Virtual Machine
 | Author: Edelis Molina
-| Language: C
-|
-| To Compile: gcc vm.c
-| To Execute: ./a.out input.txt
-|              where the files in the command line are in the current directory.
-|
-| Class: COP3402 - Systems Software – Fall 2021
 +=============================================================================*/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "compiler.h"
 
 #define MAX_PAS_LENGTH 500
-// #define MAX_CODE_LENGTH 150 // Input won't have more than 150 lines of codes
-
-/* Function prototypes */
-int base(int L);
-void print_execution(int line, char *opname, int *IR, int PC, int BP, int SP, int DP, int *pas, int GP);
 
 /* Global variables: Guaranteed to be initialized to zero */
 
 // Registers
 int IC;    // Instruction Counter. Initial Value is 0
-int GP;    // Global Pointer
+int GP;    // Global Pointer. Points to DATA segment
 int BP;    // Base Pointer
 int SP;    // Stack Pointer
 int PC;    // Program Counter
@@ -35,11 +19,9 @@ int DP;    // Global Data Pointer
 int FREE;  // Heap Pointer
 int IR[3]; // Instruction Register. IR[0] = opcode; IR[1] = L; IR[2] = M
 
-// Process Address Space
-int PAS[MAX_PAS_LENGTH];
+int PAS[MAX_PAS_LENGTH]; // Process Address Space
 
 
-/* MASTER OF CEREMONIES */
 void	execute_program(instruction* code, int outputs)
 {
   int halt = 1;  // It's set to 0 at the end of the program
@@ -48,18 +30,17 @@ void	execute_program(instruction* code, int outputs)
   int OP, L, M;  
   char opname[5];
 
-  //Load the program instructions (code) into PAS
+  // Load the program instructions (code) into PAS
   int cIndex = 0;
   while(code[cIndex].opcode != -1)
   {
     PAS[IC++] = code[cIndex].opcode;
     PAS[IC++] = code[cIndex].l;
     PAS[IC++] = code[cIndex].m;
-
     cIndex++;
   }
 
-  // Initialize all others CPU registers after the program was uploaded
+  // Initialize all others CPU registers after the program was uploaded into PAS
   GP = IC;
   DP = IC - 1;
   FREE = IC + 40;
@@ -84,7 +65,6 @@ void	execute_program(instruction* code, int outputs)
     OP = IR[0] = PAS[PC];     // opcode
     L = IR[1] = PAS[PC + 1];  // L
     M = IR[2] = PAS[PC + 2];  // M
-
     PC += 3;
 
     // Execute Cycle   
@@ -108,8 +88,8 @@ void	execute_program(instruction* code, int outputs)
           case 0:
             strcpy(opname, "RTN");  // Return
             SP = BP + 1;
-            BP = PAS[SP - 2];
-            PC = PAS[SP - 3];
+            BP = PAS[SP - 3];
+            PC = PAS[SP - 4];
             break;
 
           case 1:
@@ -303,10 +283,11 @@ void	execute_program(instruction* code, int outputs)
 
       case 5:
         strcpy(opname, "CAL");
-        PAS[SP - 1] = base(L); 	// static link (SL)
-        PAS[SP - 2] = BP;		    // dynamic link (DL)
-        PAS[SP - 3] = PC;	 		  // return address (RA)
-        BP = SP- 1;
+        PAS[SP - 1] = 0;        // functional value (FV)
+        PAS[SP - 2] = base(L); 	// static link (SL)
+        PAS[SP - 3] = BP;		    // dynamic link (DL)
+        PAS[SP - 4] = PC;	 		  // return address (RA)
+        BP = SP - 2;
         PC = M;
         break;
 
@@ -379,18 +360,17 @@ void	execute_program(instruction* code, int outputs)
       default:
         printf("Value of OP is not valid\n");
 
-    } // End of switch for OP
+    } //End of switch for OP
 
     if(outputs == 1)
       print_execution(oldPC/3, opname, IR, PC, BP, SP, DP, PAS, GP);
 
-  } // End of while loop
+  } //End of while loop
  
 }
 
 
-// From instructions: "This function will be helpful to find a variable in a different 
-// Activation Record some L levels down:
+// This function will be helpful to find a variable in a different AR some L levels down:
 /* Find base L levels down */ 
 int base(int L)
 {

@@ -1,15 +1,6 @@
 /*=============================================================================
 | Assignment: HW03 – Parser-Code Generator
-|
 | Author: Edelis Molina
-| Language: C
-|
-| To Compile: gcc driver.c lex.o parser.c vm.o -OR- run the Makefile with command "make". 
-|             Makefile runs the command "gcc driver.c lex.o parser.c vm.o"
-|
-| To Execute: ./a.out filename.txt directives
-|
-| Class: COP3402 - Systems Software – Fall 2021
 +=============================================================================*/
 
 #include <stdlib.h>
@@ -19,6 +10,7 @@
 
 #define MAX_CODE_LENGTH 1000
 #define MAX_SYMBOL_COUNT 100
+
 
 typedef enum op_code
 {
@@ -129,7 +121,7 @@ void program()
   {
     if (code[i].opcode == CAL)
     {
-      code[i].m = table[code[i].m].addr;
+      code[i].m = table[code[i].m].addr; //address of the procedure in symbol table
     }
   }
 
@@ -143,7 +135,6 @@ void block()
   level++; //level 0 first time blocked() it's called
   int procedure_idx = tIndex - 1;
 
-  // printf("First token of the program: %s %d %d\n", token.name, token.value, token.type);
   const_declaration();
 
   int x; // number of vars declared
@@ -331,8 +322,8 @@ void statement()
     return;
   }
 
-  //2. beginsym
-  else if (token.type == beginsym)
+  //2. dosym
+  else if (token.type == dosym)
   {
     do
     {
@@ -341,9 +332,9 @@ void statement()
 
     } while (token.type == semicolonsym);
 
-    if (token.type != endsym)
+    if (token.type != odsym)
     {
-      if (token.type == identsym || token.type == beginsym || token.type == ifsym || token.type == whilesym || token.type == readsym || token.type == writesym || token.type == callsym)
+      if (token.type == identsym || token.type == dosym || token.type == whensym || token.type == whilesym || token.type == readsym || token.type == writesym || token.type == callsym)
       {
         printparseerror(15);
       }
@@ -358,8 +349,8 @@ void statement()
     return;
   }
 
-  //3. ifsym
-  else if (token.type == ifsym)
+  //3. whensym
+  else if (token.type == whensym)
   {
     getNextToken();
 
@@ -369,14 +360,14 @@ void statement()
 
     emit(JPC, 0, 0);
 
-    if (token.type != thensym)
+    if (token.type != dosym)
       printparseerror(8);
 
     getNextToken();
 
     statement();
 
-    if (token.type == elsesym)
+    if (token.type == elsedosym)
     {
       jmpIdx = cIndex;
       emit(JMP, 0, 0);
