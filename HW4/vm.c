@@ -8,7 +8,6 @@
 #define MAX_PAS_LENGTH 500
 
 /* Global variables: Guaranteed to be initialized to zero */
-
 // Registers
 int IC;    // Instruction Counter. Initial Value is 0
 int GP;    // Global Pointer. Points to DATA segment
@@ -22,7 +21,7 @@ int IR[3]; // Instruction Register. IR[0] = opcode; IR[1] = L; IR[2] = M
 int PAS[MAX_PAS_LENGTH]; // Process Address Space
 
 
-void	execute_program(instruction* code, int outputs)
+void execute_program(instruction* code, int outputs)
 {
   int halt = 1;  // It's set to 0 at the end of the program
 

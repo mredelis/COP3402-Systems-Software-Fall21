@@ -141,11 +141,12 @@ void block()
   x = var_declaration();
 
   procedure_declaration();
+
   table[procedure_idx].addr = cIndex * 3;
   if (level == 0)
-    emit(INC, 0, x); //INC 0 M (M = x). Allocate M mem words
+    emit(INC, 0, x); //INC 0 M (M = x). 
   else
-    emit(INC, 0, x + 3);
+    emit(INC, 0, x + 4); //Increment sp by M. First four are FV, SL, DL & RA
 
   statement();
 
@@ -225,9 +226,9 @@ int var_declaration()
         printparseerror(18);
 
       if (level == 0)
-        addToSymbolTable(2, token.name, 0, level, numVars - 1, 0); //value = 0; address = numVars-1
+        addToSymbolTable(2, token.name, 0, level, numVars - 1, 0); //value = 0; address = numVars-1. For main function that does not have FV, SL, DL, RA
       else
-        addToSymbolTable(2, token.name, 0, level, numVars + 2, 0); //value = 0; address = numVars+2
+        addToSymbolTable(2, token.name, 0, level, numVars + 3, 0); //value = 0; address = numVars+3
 
       getNextToken();
 
