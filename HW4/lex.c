@@ -1,15 +1,10 @@
-/* 
-	This is the lex.c file for the UCF Fall 2021 Systems Software Project.
-	For HW2, you must implement the function lexeme *lexanalyzer(char *input).
-	You may add as many constants, global variables, and support functions
-	as you desire.
-	
-	If you choose to alter the printing functions or delete list or lex_index, 
-	you MUST make a note of that in you readme file, otherwise you will lose 5 points.
-*/
+/*=============================================================================
+| Assignment: HW02 – Lexical Analizer
+| Author: Edelis Molina
++=============================================================================*/
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include "compiler.h"
