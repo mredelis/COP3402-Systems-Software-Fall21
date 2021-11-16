@@ -58,6 +58,8 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
       list[lex_index].type = 17;
     else if(input[i] == '%')
       list[lex_index].type = 19;
+    else if (input[i] == '=') //eqlsym. In hw2 the symbol was '=='
+      list[lex_index].type = 20;
     else if(input[i] == '(')
       list[lex_index].type = 27;
     else if(input[i] == ')')
@@ -69,22 +71,7 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
     else if(input[i] == ';')
       list[lex_index].type = 31; 
 
-    // Handle special symbol with 2 chars. Check next char
-    // Symbol ==
-    else if(input[i] == '=')
-    {
-      if(input[i + 1] == '=')
-      {
-        list[lex_index].type = 20;
-        i++;
-      }
-      else // Invalid symbol
-      {
-        printlexerror(1); 
-        return NULL;  
-      } 
-    } 
-    
+    // Handle special symbol with 2 chars. Check next char    
     // Symbol !=
     else if(input[i] == '!')
     {
@@ -97,9 +84,9 @@ lexeme *lexanalyzer(char *input, int printTokensFlag)
         printlexerror(1);   
         return NULL; 
       }
-    } 
+    }
 
-    // Symbol :=
+    // Symbol := (assignsym)
     else if(input[i] == ':')
     {
       if(input[i + 1] == '=') {
@@ -280,7 +267,7 @@ void printtokens()
 				printf("%11s\t%d", "odd", oddsym);
 				break;
 			case eqlsym:
-				printf("%11s\t%d", "==", eqlsym);
+				printf("%11s\t%d", "=", eqlsym);
 				break;
 			case neqsym:
 				printf("%11s\t%d", "!=", neqsym);
