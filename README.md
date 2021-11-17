@@ -1,10 +1,9 @@
 # University of Central Florida
 ## COP3402: Systems Software, Fall 2021
-### Author: Edelis Molina Rios
 
 **Compiler Programming Project**
 
-In COP3402, it was required to implement a virtual machine and developing a small compiler that generates code for the virtual machine. The project is divided into 4 steps.
+In COP3402, it was required to implement a virtual machine and develop a small compiler that generates code for the virtual machine. The project is divided into 4 steps.
 
 1. HW1: Implement a virtual machine
 2. HW2: Implement a scanner (lexical analizer)
