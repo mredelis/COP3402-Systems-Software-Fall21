@@ -3,13 +3,13 @@
 | Author: Edelis Molina
 +=============================================================================*/
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 #include "compiler.h"
 
-#define MAX_NUMBER_TOKENS 500
+#define MAX_NUMBER_TOKENS 1000
 #define MAX_IDENT_LEN 11
 #define MAX_NUMBER_LEN 5
 #define LENGTH 100     // for char buffer

@@ -8,7 +8,7 @@
 #include <string.h>
 #include "compiler.h"
 
-#define MAX_PAS_LENGTH 500
+#define MAX_PAS_LENGTH 3000
 
 /* Global variables: Guaranteed to be initialized to zero */
 // Registers
@@ -23,14 +23,12 @@ int IR[3]; // Instruction Register. IR[0] = opcode; IR[1] = L; IR[2] = M
 
 int PAS[MAX_PAS_LENGTH]; // Process Address Space
 
-/* Function prototypes */
+//Function prototypes
 int base(int L);
 void print_execution(int line, char *opname, int *IR, int PC, int BP, int SP, int DP, int *pas, int GP);
 
-void execute_program(instruction *code, int outputs)
+void execute_program(instruction *code, int printFlag)
 {
-  int halt = 1; // It's set to 0 at the end of the program
-
   // Helper variables
   int OP, L, M;
   char opname[5];
@@ -54,12 +52,13 @@ void execute_program(instruction *code, int outputs)
   SP = MAX_PAS_LENGTH;
 
   // Print column headers and initial values of each register to the Terminal
-  if (outputs == 1)
+  if (printFlag == 1)
   {
-    printf("\t\t\t\t%s\t%s\t%s\t%s\t%s", "PC", "BP", "SP", "DP", "data\n");
+    printf("\t\t\t\tPC\tBP\tSP\tDP\tdata\n");
     printf("Initial values:\t\t\t%d\t%d\t%d\t%d\n", PC, BP, SP, DP);
   }
 
+  int halt = 1; // It's set to 0 at the end of the program
   while (halt == 1)
   {
     // Save previous PC to print line number
@@ -92,7 +91,7 @@ void execute_program(instruction *code, int outputs)
       switch (M)
       {
       case 0:
-        strcpy(opname, "RTN"); // Return
+        strcpy(opname, "RTN");
         SP = BP + 1;
         BP = PAS[SP - 3];
         PC = PAS[SP - 4];
@@ -406,29 +405,29 @@ void execute_program(instruction *code, int outputs)
 
     } //End of switch for OP
 
-    if (outputs == 1)
+    if (printFlag == 1)
       print_execution(oldPC / 3, opname, IR, PC, BP, SP, DP, PAS, GP);
 
   } //End of while loop
 }
 
-//Find a variable in a different AR some L levels down:
-/* Find base of Activation Record (AR) L levels down */
+//Find base of Activation Record (AR) L levels down
 int base(int L)
 {
+  int ctr = L;
   int arb = BP; // arb = activation record base
-  while (L > 0) // find base L levels down
+  while (ctr > 0)
   {
     //SL points to the AR base of the caller function, but in the AR the SL comes after FV
-    //ans since the stack grows downwards, if leverl != 0 to access the SL of current AR
+    //and since the stack grows downwards, if level != 0 to access the SL of current AR
     //substract 1 from BP
     arb = PAS[arb - 1];
-    L--;
+    ctr--;
   }
   return arb;
 }
 
-/* Function for printing */
+//Function for printing
 void print_execution(int line, char *opname, int *IR, int PC, int BP, int SP, int DP, int *pas, int GP)
 {
   int i;

@@ -33,7 +33,6 @@ typedef struct symbol {
 	int mark;
 } symbol;
 
-
 lexeme *lexanalyzer(char *input, int printFlag); 					//Homework 02
 instruction *parse(lexeme *list, int printTable, int printCode); 	//Homework 03
 void execute_program(instruction *code, int printFlag); 			//Homework 01

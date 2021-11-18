@@ -10,7 +10,6 @@
 
 #define MAX_CODE_LENGTH 3000
 
-// MASTER OF CEREMONIES
 // argc(ARGument Count) is the # of command line arguments including the name of the execute_program
 // argv(ARGument Vector) is array of character pointers listing all the arguments.
 // argv[0] is the name of the program. After that till argv[argc-1] every elem is command-line arg
@@ -32,11 +31,11 @@ int main(int argc, char *argv[])
 	
 	ifp = fopen(argv[1], "r");
 
-  // Allocate space for a char array of MAX_CODE_LENGTH elements
+  	//Allocate space for a char array of MAX_CODE_LENGTH elements
 	input = malloc(MAX_CODE_LENGTH * sizeof(char));
 	i = 0;
 	
-  // Read in input file to a char array
+  	//Read in input file to a char array
 	c = fgetc(ifp);
 	while (1)
 	{
@@ -65,7 +64,6 @@ int main(int argc, char *argv[])
 		}
 	}
 
-
 	list = lexanalyzer(input, tokens);
 	if (list == NULL)
 	{
@@ -73,8 +71,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
- 
-	code = parse(list, symbols, codes);
+ 	code = parse(list, symbols, codes);
 	if (code == NULL)
 	{
 	 	free(input);
@@ -87,5 +84,6 @@ int main(int argc, char *argv[])
 	free(input);
 	free(list);
 	free(code);
+	
 	return 0;
 }
